@@ -1,6 +1,6 @@
 import React from "react";
 
-const arr = [
+/* const arr = [
   { productImg: "./images/1.png" },
   { productImg: "./images/2.webp" },
   { productImg: "./images/3.webp" },
@@ -10,21 +10,25 @@ const arr = [
   { productImg: "./images/7.webp" },
   { productImg: "./images/8.png" },
 ];
-const Products = () => {
+*/
+async function getData() {
+  const res = await fetch("https://fakestoreapi.com/products");
+  return res.json();
+}
+const Products = async () => {
+  const data = await getData();
+
   return (
     <section className="products flex">
-      {arr.map((item) => {
+      {data.map((item) => {
         return (
-          <article key={item.productImg} className="card">
+          <article title={item.title} key={item.id} className="card">
             <a href="/pages/product-details.html">
-              <img width={266} src={item.productImg} alt="" />
+              <img width={266} height={250} src={item.image} alt="" />
             </a>
             <div style={{ width: "266px" }} className="content">
-              <h1 className="title">Product Title</h1>
-              <p className="description">
-                Lorem ipsum dolor sit amet consectetur elit adipisicing . Ex
-                tempore dolor in, accusantium laudantium accusamus.
-              </p>
+              <h1 className="title">{item.title.slice(0, 14)}...</h1>
+              <p className="description">{item.description.slice(0, 111)}...</p>
               <div
                 className="flex"
                 style={{
@@ -32,7 +36,7 @@ const Products = () => {
                   paddingBottom: "0.7rem",
                 }}
               >
-                <div className="price">$100</div>
+                <div className="price">${item.price}</div>
                 <button className="add-to-cart flex">
                   <i className="fa-solid fa-cart-plus" />
                   Add To Cart
