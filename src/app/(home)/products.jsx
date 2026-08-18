@@ -1,4 +1,7 @@
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import React from "react";
 
 // const arr = [
@@ -21,7 +24,7 @@ async function getData() {
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
+    notFound();
   }
 
   return res.json();
@@ -52,7 +55,10 @@ const Products = async () => {
               >
                 <div className="price">${item.price}</div>
                 <button className="add-to-cart flex">
-                  <i className="fa-solid fa-cart-plus" />
+                  <FontAwesomeIcon
+                    style={{ width: "1rem" }}
+                    icon={faCartPlus}
+                  />
                   Add To Cart
                 </button>
               </div>
