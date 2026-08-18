@@ -2,7 +2,8 @@ import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import React from "react";
+import Image from "next/image.js";
+import { arrData } from "./myProduct";
 
 // const arr = [
 //   { productImg: "./images/1.png" },
@@ -15,8 +16,9 @@ import React from "react";
 //   { productImg: "./images/8.png" },
 // ];
 
+/*
 async function getData() {
-  // await new Promise((resolve) => setTimeout(resolve, 3000));
+  // await new Promise(resolve => setTimeout(resolve, 3000))
 
   const res = await fetch("http://localhost:4000/products", {
     next: { revalidate: 0 },
@@ -29,17 +31,23 @@ async function getData() {
 
   return res.json();
 }
-
+*/
 const Products = async () => {
-  const arrdata = await getData();
+  // const arrData = await getData();
 
   return (
     <section className="products flex">
-      {arrdata.map((item) => {
+      {arrData.map((item) => {
         return (
           <article title={item.title} key={item.id} className="card">
             <Link href={`/product-details/${item.id}`}>
-              <img width={266} src={`.${item.productImg}`} alt="" />
+              <Image
+                quality={100}
+                width={266}
+                height={260}
+                src={item.productImg}
+                alt=""
+              />
             </Link>
             <div style={{ width: "266px" }} className="content">
               <h1 className="title">{item.title.slice(0, 15)}...</h1>
