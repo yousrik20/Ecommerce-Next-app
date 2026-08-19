@@ -20,6 +20,7 @@ const RegisterForm = () => {
 
     if (response.ok) {
       console.log("doneeeeeeeeeeeeeeeeeeeeeeeeeee");
+      eo.target.reset();
     }
   };
   return (
