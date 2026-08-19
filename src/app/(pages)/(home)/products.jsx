@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Image from "next/image.js";
-import { arrData } from "./myProduct";
 
 // const arr = [
 //   { productImg: "./images/1.png" },
@@ -16,7 +15,6 @@ import { arrData } from "./myProduct";
 //   { productImg: "./images/8.png" },
 // ];
 
-/*
 async function getData() {
   // await new Promise(resolve => setTimeout(resolve, 3000))
 
@@ -31,9 +29,9 @@ async function getData() {
 
   return res.json();
 }
-*/
+
 const Products = async () => {
-  // const arrData = await getData();
+  const arrData = await getData();
 
   return (
     <section className="products flex">
@@ -50,7 +48,7 @@ const Products = async () => {
               />
             </Link>
             <div style={{ width: "266px" }} className="content">
-              <h1 className="title">{item.title.slice(0, 15)}...</h1>
+              <h3 className="title">{item.title.slice(0, 15)}...</h3>
               <p className="description">
                 {item.description.slice(0, 111)}....
               </p>

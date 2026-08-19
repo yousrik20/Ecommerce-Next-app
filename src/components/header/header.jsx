@@ -1,4 +1,3 @@
-import React from "react";
 import "./header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
-const Header = () => {
+const Header = ({ isSignPage = false, isRegisterPage = false }) => {
   return (
     <header id="headerElement" className="flex">
       <Link href="/" className="logo">
@@ -40,7 +39,10 @@ const Header = () => {
           <span className="products-number">2</span>
         </Link>
 
-        <Link className="sign-in" href="/signin">
+        <Link
+          className={`sign-in ${isSignPage ? "border" : null}`}
+          href="/signin"
+        >
           <FontAwesomeIcon
             className="fa-solid fa-right-to-bracket"
             style={{
@@ -51,7 +53,10 @@ const Header = () => {
           Sign in
         </Link>
 
-        <Link className="register" href="/register">
+        <Link
+          className={`register ${isRegisterPage ? "border" : null}`}
+          href="/register"
+        >
           <FontAwesomeIcon
             className="fa-solid fa-user-plus"
             style={{

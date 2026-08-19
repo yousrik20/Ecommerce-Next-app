@@ -1,7 +1,8 @@
 // @ts-nocheck
+
 import { Suspense } from "react";
-import Footer from "../../components/footer/footer.jsx";
-import Header from "../../components/header/header.jsx";
+import Footer from "../../../components/footer/footer.jsx";
+import Header from "../../../components/header/header.jsx";
 import "./home.css";
 import Products from "./products.jsx";
 import Loading from "./loading.jsx";
@@ -29,7 +30,7 @@ export default function Home() {
       <main>
         <h1 className="recommended flex">
           <FontAwesomeIcon
-            style={{ width: "1.2rem", marginRight: "1.2rem" }}
+            style={{ width: "1.9rem", marginRight: "1.2rem" }}
             icon={faCheck}
           />
           Recommended for you

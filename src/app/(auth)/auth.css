@@ -1,0 +1,25 @@
+header a {
+  color: inherit;
+  text-decoration: none;
+}
+header span {
+  position: relative;
+  top: 2px;
+}
+
+body.auth-pages {
+  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
+
+  & .fa-solid {
+    color: white;
+  }
+
+  & main {
+    max-width: 500px;
+  }
+
+  & footer {
+    background-color: transparent;
+  }
+}

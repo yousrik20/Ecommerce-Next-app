@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { notFound } from "next/navigation";
 import Image from "next/image.js";
-import { arrData } from "app/(home)/myProduct";
+import { arrData } from "app/(pages)/(home)/myProduct";
 
 /*
 async function getData(id) {
@@ -43,6 +43,7 @@ const Page = async ({ params }) => {
 
   return (
     <div
+      className="product-details"
       style={{
         height: "100vh",
         display: "grid",
