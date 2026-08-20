@@ -1,6 +1,7 @@
 import UserModal from "app/DBconfig/models/user";
 import { connectMongoDB } from "app/DBconfig/mongoDB";
 import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
 export async function POST(request) {
   // 1- Recieve data from Front-end
@@ -9,13 +10,17 @@ export async function POST(request) {
 
   // 2- connect to DB
   await connectMongoDB();
-  // 3- Try to store obj to DB
+
+  // 3- hashing Password with Bcrypt.js
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(objFromFrontEnd.password, salt);
+  // 4- Try to store obj to DB
   await UserModal.create({
     name: objFromFrontEnd.name,
     email: objFromFrontEnd.email,
-    password: objFromFrontEnd.password,
+    password: hashedPassword,
   });
-  // 4- Go back to frontend
+  // 5- Go back to frontend
 
   return NextResponse.json({});
 }
