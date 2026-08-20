@@ -21,6 +21,14 @@ const SigninForm = () => {
       redirect: false,
     });
     console.log(res);
+    if (!res.ok) {
+      seterror("Invalid Email or Password");
+      setisLoading(false);
+      return;
+    } else {
+      console.log("WELCOME :)");
+      setisLoading(false);
+    }
   };
 
   return (
