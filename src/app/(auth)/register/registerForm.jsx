@@ -1,28 +1,68 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 const RegisterForm = () => {
   const [name, setname] = useState(null);
   const [email, setemail] = useState(null);
   const [password, setpassword] = useState(null);
+  const [loading, setloading] = useState(false);
+
+  const [error, seterror] = useState(null);
+  const router = useRouter();
+
   const handleSubmit = async (eo) => {
     eo.preventDefault();
-    const response = await fetch("api/register", {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
+    setloading(true);
+    seterror(null);
+
+    if (!name || !email || !password) {
+      seterror("All input must be filled");
+      toast.error("All input must be filled");
+      setloading(false);
+      return;
+    }
+
+    // Check if email exist
+    const resUserExist = await fetch("api/userExist", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email, password }), // body data type must match "Content-Type" header
+      body: JSON.stringify({ email }),
     });
 
-    console.log(response);
+    const isUserExist = await resUserExist.json();
+
+    if (isUserExist.user) {
+      seterror("Email Already exist");
+      toast.error("Email Already exist");
+      setloading(false);
+      return;
+    }
+
+    // Store data in DataBase
+    const response = await fetch("api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email, password }),
+    });
 
     if (response.ok) {
-      console.log("doneeeeeeeeeeeeeeeeeeeeeeeeeee");
+      toast.success("Your Acoount Created Successfully!");
       eo.target.reset();
+
+      router.push("/signin");
+    } else {
+      seterror("faild to create acoount, Please try again");
     }
+
+    setloading(false);
   };
+
   return (
     <form onSubmit={handleSubmit} style={{ textAlign: "left" }}>
       <div className="mb-4">
@@ -45,10 +85,10 @@ const RegisterForm = () => {
           Email address
         </label>
         <input
+          required
           onChange={(eo) => {
             setemail(eo.target.value);
           }}
-          required
           type="email"
           className="form-control"
           id="exampleInputEmail1"
@@ -60,28 +100,38 @@ const RegisterForm = () => {
           Password
         </label>
         <input
+          required
           onChange={(eo) => {
             setpassword(eo.target.value);
           }}
-          required
           type="password"
           className="form-control"
           id="exampleInputPassword1"
         />
       </div>
-      <div className="mb-3 form-check">
-        <input
-          type="checkbox"
-          className="form-check-input"
-          id="exampleCheck1"
-        />
-        <label className="form-check-label" htmlFor="exampleCheck1">
-          Check me out
-        </label>
-      </div>
-      <button type="submit" className="btn btn-primary">
-        Create Account
+
+      <button
+        disabled={!name || !email || !password}
+        type="submit"
+        className="btn btn-primary"
+      >
+        {loading ? (
+          <div
+            style={{ width: "1.5rem", height: "1.5rem" }}
+            className="spinner-border"
+            role="status"
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        ) : (
+          "Create Account"
+        )}
       </button>
+
+      <p style={{ color: "#ff7790", fontSize: "1.1rem", marginTop: "1rem" }}>
+        {" "}
+        {error}
+      </p>
     </form>
   );
 };
