@@ -11,6 +11,7 @@ export async function POST(request) {
   await connectMongoDB();
   // 3- Check Email Exist
   const user = await UserModal.findOne({
+    // @ts-ignore
     email: objFromFrontEnd.email,
   });
 

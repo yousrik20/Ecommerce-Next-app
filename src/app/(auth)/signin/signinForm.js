@@ -1,12 +1,15 @@
 "use client";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SigninForm = () => {
+  const { data: session, status } = useSession();
   const [email, setemail] = useState(null);
   const [password, setpassword] = useState(null);
   const [isLoading, setisLoading] = useState(false);
   const [error, seterror] = useState(null);
+  const router = useRouter();
 
   const handleSubmit = async (eo) => {
     eo.preventDefault();
@@ -26,7 +29,7 @@ const SigninForm = () => {
       setisLoading(false);
       return;
     } else {
-      console.log("WELCOME :)");
+      router.replace("/");
       setisLoading(false);
     }
   };
@@ -82,6 +85,16 @@ const SigninForm = () => {
         {" "}
         {error}
       </p>
+      {status === "authenticated" && (
+        <button
+          onClick={() => {
+            signOut();
+          }}
+          className="btn btn-danger"
+        >
+          sign out
+        </button>
+      )}
     </form>
   );
 };

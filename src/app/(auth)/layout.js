@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../globals.css";
 import "./auth.css";
 import { ToastContainer } from "react-toastify";
+import AuthProvider from "app/providers/AuthProvider";
 
 export const metadata = {
   icons: {
@@ -22,20 +23,22 @@ export default function RootLayout({ children }) {
         }}
         className="text-center text-bg-dark auth-pages"
       >
-        {children}
-        <Footer />
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
+        <AuthProvider>
+          {children}
+          <Footer />
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,13 +1,8 @@
 import "./header.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBagShopping,
-  faCartShopping,
-  faHouse,
-  faRightToBracket,
-  faUserPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
+import NavLinks from "./navLinks";
 
 const Header = ({ isSignPage = false, isRegisterPage = false }) => {
   return (
@@ -25,48 +20,7 @@ const Header = ({ isSignPage = false, isRegisterPage = false }) => {
         <span style={{ fontWeight: "bold" }}>AWU</span>
         <p style={{ letterSpacing: "0.5px" }}>Shopping</p>
       </Link>
-
-      <nav className="links">
-        <Link style={{ position: "relative" }} className="cart" href="/cart">
-          <FontAwesomeIcon
-            className="fa-solid fa-cart-shopping"
-            style={{
-              width: "0.8rem",
-            }}
-            icon={faCartShopping}
-          />
-          $0.00
-          <span className="products-number">2</span>
-        </Link>
-
-        <Link
-          className={`sign-in ${isSignPage ? "border" : null}`}
-          href="/signin"
-        >
-          <FontAwesomeIcon
-            className="fa-solid fa-right-to-bracket"
-            style={{
-              width: "0.8rem",
-            }}
-            icon={faRightToBracket}
-          />
-          Sign in
-        </Link>
-
-        <Link
-          className={`register ${isRegisterPage ? "border" : null}`}
-          href="/register"
-        >
-          <FontAwesomeIcon
-            className="fa-solid fa-user-plus"
-            style={{
-              width: "0.8rem",
-            }}
-            icon={faUserPlus}
-          />
-          Register
-        </Link>
-      </nav>
+      <NavLinks isSignPage={isSignPage} isRegisterPage={isRegisterPage} />
     </header>
   );
 };
