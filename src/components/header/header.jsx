@@ -4,7 +4,11 @@ import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import NavLinks from "./navLinks";
 
-const Header = ({ isSignPage = false, isRegisterPage = false }) => {
+const Header = ({
+  isSignPage = false,
+  isRegisterPage = false,
+  isAdminPage = false,
+}) => {
   return (
     <header id="headerElement" className="flex">
       <Link href="/" className="logo">
@@ -20,7 +24,11 @@ const Header = ({ isSignPage = false, isRegisterPage = false }) => {
         <span style={{ fontWeight: "bold" }}>AWU</span>
         <p style={{ letterSpacing: "0.5px" }}>Shopping</p>
       </Link>
-      <NavLinks isSignPage={isSignPage} isRegisterPage={isRegisterPage} />
+      <NavLinks
+        isSignPage={isSignPage}
+        isRegisterPage={isRegisterPage}
+        isAdminPage={isAdminPage}
+      />
     </header>
   );
 };
