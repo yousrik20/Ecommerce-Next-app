@@ -1,8 +1,10 @@
+"use client";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Image from "next/image.js";
+import { useEffect, useState } from "react";
 
 // const arr = [
 //   { productImg: "./images/1.png" },
@@ -15,6 +17,7 @@ import Image from "next/image.js";
 //   { productImg: "./images/8.png" },
 // ];
 
+/*
 async function getData() {
   // await new Promise(resolve => setTimeout(resolve, 3000))
 
@@ -29,11 +32,23 @@ async function getData() {
 
   return res.json();
 }
+*/
 
-const Products = async () => {
+const Products = () => {
+  const [arrData, setarrData] = useState([]);
+  useEffect(() => {
+    const getData = async (params) => {
+      const res = await fetch("http://localhost:4000/products");
 
-  const arrData = await getData();
-
+      if (!res.ok) {
+        // This will activate the closest `error.js` Error Boundary
+        notFound();
+      }
+      const data = await res.json();
+      setarrData(data);
+    };
+    getData();
+  }, []);
   return (
     <section className="products flex">
       {arrData.map((item) => {

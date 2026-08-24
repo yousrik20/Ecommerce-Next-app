@@ -23,7 +23,9 @@ export async function POST(request) {
   await connectMongoDB();
 
   // 4- Try to Store obj to DB
+  // @ts-ignore
   await ProductModal.create({
+    productImg: imgURL,
     title: objFromFrontEnd.get("title"),
     price: objFromFrontEnd.get("price"),
     description: objFromFrontEnd.get("description"),
