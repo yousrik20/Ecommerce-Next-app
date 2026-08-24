@@ -1,17 +1,27 @@
 import ProductModal from "app/DBconfig/models/product";
-import UserModal from "app/DBconfig/models/user";
 import { connectMongoDB } from "app/DBconfig/mongoDB";
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 
 export async function GET(request) {
-  await connectMongoDB();
-  const id = request.nextUrl.searchParams.get("id");
+  try {
+    const id = request.nextUrl.searchParams.get("id");
 
-  // @ts-ignore
-  const objData = await ProductModal.findOne({
-    _id: id,
-  });
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ error: "Invalid product ID" }, { status: 400 });
+    }
 
-  // 5- Go back to frontend
-  return NextResponse.json(objData);
+    await connectMongoDB();
+
+    // @ts-ignore
+    const objData = await ProductModal.findById(id);
+
+    if (!objData) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(objData);
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
