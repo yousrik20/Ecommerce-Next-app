@@ -2,23 +2,34 @@ import Footer from "components/footer/footer";
 import Header from "components/header/header";
 import "./product-details.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { notFound } from "next/navigation";
 import Image from "next/image.js";
 import AdminBtn from "./adminBtn";
+import { connectMongoDB } from "app/DBconfig/mongoDB";
+import ProductModal from "app/DBconfig/models/product";
+import mongoose from "mongoose";
 
-async function getData(iddd) {
-  const res = await fetch(`/api/getOneProduct?id=${iddd}`);
-
-  if (!res.ok) {
+// دالة جلب البيانات مباشرة من قاعدة البيانات
+async function getProductData(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
     notFound();
   }
 
-  return res.json();
+  await connectMongoDB();
+  // @ts-ignore
+  const product = await ProductModal.findById(id).lean();
+
+  if (!product) {
+    notFound();
+  }
+
+  // تحويل ObjectId إلى String لتجنب أخطاء Serialization
+  return JSON.parse(JSON.stringify(product));
 }
 
 export async function generateMetadata({ params }) {
-  const objData = await getData(params.id);
+  const objData = await getProductData(params.id);
   return {
     title: objData.title,
     description: objData.description,
@@ -26,8 +37,7 @@ export async function generateMetadata({ params }) {
 }
 
 const Page = async ({ params }) => {
-  const objData = await getData(params.id);
-  console.log(objData);
+  const objData = await getProductData(params.id);
 
   return (
     <div
@@ -47,7 +57,7 @@ const Page = async ({ params }) => {
             width={266}
             height={270}
             quality={100}
-            alt=""
+            alt={objData.title || "Product image"}
             src={`${objData.productImg}`}
           />
           <div className="product-details">
