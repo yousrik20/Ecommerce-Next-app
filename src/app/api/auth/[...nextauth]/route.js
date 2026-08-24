@@ -13,6 +13,7 @@ export const authOptions = {
 
       async authorize(credentials, req, res) {
         await connectMongoDB();
+        // @ts-ignore
         const user = await UserModal.findOne({
           email: credentials.email,
         });
@@ -20,7 +21,7 @@ export const authOptions = {
         if (user) {
           const match = await bcrypt.compare(
             credentials.password,
-            user.password
+            user.password,
           );
           if (match) {
             return user;
