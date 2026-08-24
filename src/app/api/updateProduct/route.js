@@ -1,27 +1,32 @@
 import ProductModal from "app/DBconfig/models/product";
 import { connectMongoDB } from "app/DBconfig/mongoDB";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function PUT(request) {
-  // 1- Receive data from Front-end
-  console.log("kkkkkkkkkkkkkkkkkkkkkkkkk");
-  const objFromFrontEnd = await request.json();
-  console.log(objFromFrontEnd);
+  try {
+    const objFromFrontEnd = await request.json();
+    const { productId, title, price, description } = objFromFrontEnd;
 
-  // 2- connect to DB
-  await connectMongoDB();
+    if (!productId) {
+      return NextResponse.json({ error: "Product ID is required" }, { status: 400 });
+    }
 
-  // 4- Try to Store obj to DB
-  // @ts-ignore
-  await ProductModal.updateOne(
-    { _id: objFromFrontEnd.productId },
-    {
-      title: objFromFrontEnd.title,
-      price: objFromFrontEnd.price,
-      description: objFromFrontEnd.description,
-    },
-  );
+    await connectMongoDB();
 
-  // 5- Go back to frontend
-  return NextResponse.json({});
+    // تحديث البيانات
+    await ProductModal.updateOne(
+      { _id: productId },
+      { title, price, description }
+    );
+
+    // تحديث الكاش لصفحة المنتجات وصفحة التفاصيل
+    revalidatePath("/");
+    revalidatePath(`/product/${productId}`);
+
+    return NextResponse.json({ message: "Product updated successfully" });
+  } catch (error) {
+    console.error("Update Error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
