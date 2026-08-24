@@ -17,6 +17,7 @@ export async function POST(request) {
   const hashedPassword = await bcrypt.hash(objFromFrontEnd.password, salt);
 
   // 4- Try to Store obj to DB
+  // @ts-ignore
   await UserModal.create({
     name: objFromFrontEnd.name,
     email: objFromFrontEnd.email,
