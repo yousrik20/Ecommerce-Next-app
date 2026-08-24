@@ -4,23 +4,25 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
 export async function POST(request) {
-  // 1- Recieve data from Front-end
+  // 1- Receive data from Front-end
   const objFromFrontEnd = await request.json();
   console.log(objFromFrontEnd);
 
   // 2- connect to DB
   await connectMongoDB();
 
-  // 3- hashing Password with Bcrypt.js
+  // 3- Hashing password with bcrypt.js
+  console.log("*****************    salt   **************************");
   const salt = await bcrypt.genSalt();
   const hashedPassword = await bcrypt.hash(objFromFrontEnd.password, salt);
-  // 4- Try to store obj to DB
+
+  // 4- Try to Store obj to DB
   await UserModal.create({
     name: objFromFrontEnd.name,
     email: objFromFrontEnd.email,
     password: hashedPassword,
   });
-  // 5- Go back to frontend
 
+  // 5- Go back to frontend
   return NextResponse.json({});
 }

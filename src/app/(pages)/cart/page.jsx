@@ -1,10 +1,19 @@
-import React from "react";
+import React from 'react';
+
+
+
+
 export const metadata = {
-  title: "Cart Page",
-  description: "Description of the Cart Page",
-};
+  title: 'Signin page',
+  description: 'description for Signin page',
+
+}
 const Page = () => {
-  return <h1>Cart Page</h1>;
-};
+  return (
+    <h1>
+      Cart page
+    </h1>
+  );
+}
 
 export default Page;

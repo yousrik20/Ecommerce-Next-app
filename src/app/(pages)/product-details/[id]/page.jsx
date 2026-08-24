@@ -5,11 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import { notFound } from "next/navigation";
 import Image from "next/image.js";
-import { arrData } from "app/(pages)/(home)/myProduct";
 
-/*
-async function getData(id) {
-  const res = await fetch(`http://localhost:4000/products/${id}`);
+async function getData(iddd) {
+  const res = await fetch(`http://localhost:4000/products/${iddd}`);
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 
@@ -20,30 +18,22 @@ async function getData(id) {
 
   return res.json();
 }
-*/
-/*
+
 export async function generateMetadata({ params }) {
-  const resolvedParams = await params;
-
-  const objData = await getData(resolvedParams.id);
-
+  const objData = await getData(params.id);
   return {
     title: objData.title,
     description: objData.description,
   };
 }
-*/
+
 const Page = async ({ params }) => {
-  const resolvedParams = await params;
-
-  // const objData = await getData(resolvedParams.id);
-
-  const objData = arrData.find((item) => item.id === resolvedParams.id);
+  const objData = await getData(params.id);
   console.log(objData);
 
   return (
     <div
-      className="product-details"
+    className="product-details"
       style={{
         height: "100vh",
         display: "grid",
@@ -54,7 +44,7 @@ const Page = async ({ params }) => {
       <Header />
 
       <main style={{ textAlign: "center" }} className="flex">
-        <Image width={266} height={270} alt="" src={`${objData.productImg}`} />
+        <Image width={266}  height={270} quality={100}  alt="" src={`${objData.productImg}`} />
         <div className="product-details">
           <div style={{ justifyContent: "space-between" }} className="flex">
             <h2>{objData.title}</h2>

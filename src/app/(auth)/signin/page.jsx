@@ -10,7 +10,7 @@ const Page = () => {
     <>
       <Header isSignPage={true} />
       <main className="px-3">
-        <SigninForm />
+      <SigninForm />
       </main>
     </>
   );

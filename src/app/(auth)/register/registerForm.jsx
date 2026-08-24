@@ -1,10 +1,11 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 
 const RegisterForm = () => {
-  const [isRed, setisRed] = useState(false);
+const [isRed, setisRed] = useState(false);
+
   const [name, setname] = useState(null);
   const [email, setemail] = useState(null);
   const [password, setpassword] = useState(null);
@@ -17,7 +18,7 @@ const RegisterForm = () => {
     eo.preventDefault();
     setloading(true);
     seterror(null);
-    setisRed(false);
+    setisRed(false)
 
     if (!name || !email || !password) {
       seterror("All input must be filled");
@@ -25,15 +26,15 @@ const RegisterForm = () => {
       setloading(false);
       return;
     }
-    // Strong Password
+
     const regPassword =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
 
     if (!regPassword.test(password)) {
-      setisRed(true);
+      setisRed(true)
       setloading(false);
       seterror(
-        "Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 special character and 1 numeric.",
+        "Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 special character and 1 numeric."
       );
       return;
     }
@@ -52,6 +53,7 @@ const RegisterForm = () => {
     if (isUserExist.user) {
       seterror("Email Already exist");
       toast.error("Email Already exist");
+
       setloading(false);
       return;
     }
@@ -66,7 +68,7 @@ const RegisterForm = () => {
     });
 
     if (response.ok) {
-      toast.success("Your Acoount Created Successfully!");
+      toast.success("Your account has been created successfully");
       eo.target.reset();
 
       router.push("/signin");
@@ -114,7 +116,7 @@ const RegisterForm = () => {
           Password
         </label>
         <input
-          style={{ backgroundColor: isRed ? "#fcaaaa" : null }}
+        style={{backgroundColor: isRed?   "#fcaaaa" : null}}
           required
           onChange={(eo) => {
             setpassword(eo.target.value);

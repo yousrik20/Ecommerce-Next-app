@@ -31,6 +31,7 @@ async function getData() {
 }
 
 const Products = async () => {
+
   const arrData = await getData();
 
   return (
@@ -48,7 +49,7 @@ const Products = async () => {
               />
             </Link>
             <div style={{ width: "266px" }} className="content">
-              <h3 className="title">{item.title.slice(0, 15)}...</h3>
+              <h1 className="title">{item.title.slice(0, 15)}...</h1>
               <p className="description">
                 {item.description.slice(0, 111)}....
               </p>

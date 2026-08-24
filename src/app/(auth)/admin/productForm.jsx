@@ -1,9 +1,67 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 const ProductForm = () => {
-  const handleSubmit = (eo) => {
+const [img, setImg] = useState(null);
+
+
+
+  const [title, setTitle] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [description, setDescription] = useState(null);
+
+  const [isLoading, setisLoading] = useState(false);
+  const [error, seterror] = useState(null);
+
+
+  const handleSubmit = async (eo) => {
+    console.log(img)
+
+
     eo.preventDefault();
+    setisLoading(true);
+    seterror(null);
+
+    if (!title || !price  || !description) {
+      seterror("All input must be filled");
+      setisLoading(false);
+      return;
+    }
+
+
+    const formData = new FormData();
+    formData.set("productImg", img)
+    formData.set("title", title)
+    formData.set("price", price)
+    formData.set("description", description)
+
+       // Go to api/addProduct/route.js
+   const resAddProduct = await fetch("api/addProduct", {
+    method: "POST",
+
+    body:  formData,
+  });
+
+  const data = await resAddProduct.json();
+  console.log(data)
+
+
+
+  if (resAddProduct.ok) {
+    eo.target.reset();
+    toast.success(data.message);
+
+  } else {
+    setisLoading(false);
+    seterror("faild to add Product, Please try again");
+  }
+ 
+
+  setisLoading(false)
   };
+
   return (
     <form onSubmit={handleSubmit} style={{ textAlign: "left" }}>
       <div className="mb-4">
@@ -12,7 +70,7 @@ const ProductForm = () => {
         </label>
         <input
           onChange={(eo) => {
-            // setname(eo.target.value);
+            setImg(eo.target.files[0])
           }}
           required
           type="file"
@@ -23,44 +81,46 @@ const ProductForm = () => {
       </div>
       <div className="mb-4">
         <label htmlFor="exampleInputEmail1" className="form-label">
-          Product Title :
+          Product Title:
         </label>
         <input
-          placeholder="T-shirt"
           required
           onChange={(eo) => {
-            // setemail(eo.target.value);
+            setTitle(eo.target.value)
           }}
-          type="email"
+          type="text"
           className="form-control"
           id="exampleInputEmail1"
           aria-describedby="emailHelp"
+          placeholder="T-shirt"
         />
       </div>
       <div className="mb-4">
         <label htmlFor="exampleInputPassword1" className="form-label">
-          Product Price :
+          Product Price:
         </label>
         <input
           placeholder="$99.99"
           required
           onChange={(eo) => {
-            //setpassword(eo.target.value);
+            setPrice(eo.target.value)
           }}
           type="number"
           className="form-control"
           id="exampleInputPassword1"
         />
       </div>
+
       <div className="mb-4">
         <label htmlFor="exampleInputPassword1" className="form-label">
           Product Description:
         </label>
+
         <textarea
-          placeholder="Product Description..."
+          placeholder="Product Description....."
           required
           onChange={(eo) => {
-            //setpassword(eo.target.value);
+            setDescription(eo.target.value)
           }}
           rows={3}
           className="form-control"
@@ -73,7 +133,8 @@ const ProductForm = () => {
         type="submit"
         className="btn btn-primary"
       >
-        {false ? (
+        {isLoading ? (
+     
           <div
             style={{ width: "1.5rem", height: "1.5rem" }}
             className="spinner-border"
@@ -88,6 +149,7 @@ const ProductForm = () => {
 
       <p style={{ color: "#ff7790", fontSize: "1.1rem", marginTop: "1rem" }}>
         {" "}
+        {error}
       </p>
     </form>
   );

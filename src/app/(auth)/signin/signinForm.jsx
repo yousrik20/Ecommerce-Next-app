@@ -1,15 +1,16 @@
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const SigninForm = () => {
   const { data: session, status } = useSession();
+  const router = useRouter()
+
   const [email, setemail] = useState(null);
   const [password, setpassword] = useState(null);
   const [isLoading, setisLoading] = useState(false);
   const [error, seterror] = useState(null);
-  const router = useRouter();
 
   const handleSubmit = async (eo) => {
     eo.preventDefault();
@@ -23,13 +24,14 @@ const SigninForm = () => {
       password,
       redirect: false,
     });
+
     console.log(res);
     if (!res.ok) {
-      seterror("Invalid Email or Password");
+      seterror("invalid email or password");
       setisLoading(false);
       return;
     } else {
-      router.replace("/");
+      router.replace("/")
       setisLoading(false);
     }
   };
@@ -63,6 +65,7 @@ const SigninForm = () => {
           id="exampleInputPassword1"
         />
       </div>
+
       <button
         disabled={!email || !password}
         type="submit"
@@ -77,7 +80,7 @@ const SigninForm = () => {
             <span className="visually-hidden">Loading...</span>
           </div>
         ) : (
-          "Sign In"
+          "Sign in"
         )}
       </button>
 
@@ -85,16 +88,10 @@ const SigninForm = () => {
         {" "}
         {error}
       </p>
-      {status === "authenticated" && (
-        <button
-          onClick={() => {
-            signOut();
-          }}
-          className="btn btn-danger"
-        >
-          sign out
-        </button>
-      )}
+
+   
+ 
+      
     </form>
   );
 };

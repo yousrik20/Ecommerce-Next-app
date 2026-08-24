@@ -9,7 +9,7 @@ const userSchema = new Schema({
   password: String,
 });
 
-// Create a Cmodel based on that schema
+// Create a model based on that schema
 const UserModal = models.User || mongoose.model("User", userSchema);
 
 // export the model

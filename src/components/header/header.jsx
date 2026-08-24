@@ -11,7 +11,7 @@ const Header = ({
 }) => {
   return (
     <header id="headerElement" className="flex">
-      <Link href="/" className="logo">
+      <Link href={"/"} className="logo">
         <FontAwesomeIcon
           className="fa-solid fa-bag-shopping"
           style={{
@@ -24,10 +24,11 @@ const Header = ({
         <span style={{ fontWeight: "bold" }}>AWU</span>
         <p style={{ letterSpacing: "0.5px" }}>Shopping</p>
       </Link>
+
       <NavLinks
-        isSignPage={isSignPage}
-        isRegisterPage={isRegisterPage}
-        isAdminPage={isAdminPage}
+        isSignPage 
+        isRegisterPage 
+        isAdminPage 
       />
     </header>
   );
