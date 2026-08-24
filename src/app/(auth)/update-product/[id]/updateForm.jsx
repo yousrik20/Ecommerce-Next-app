@@ -68,7 +68,7 @@ const UpdateForm = ({ productId }) => {
 
       if (response.ok) {
         toast.success("Product updated successfully");
-        router.push(`/product/${productId}`);
+        router.push(`/`);
         router.refresh(); // إعادة تحديث الكاش على Vercel
       } else {
         const data = await response.json();
