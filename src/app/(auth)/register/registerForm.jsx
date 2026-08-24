@@ -1,14 +1,13 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
-const [isRed, setisRed] = useState(false);
-
-  const [name, setname] = useState(null);
-  const [email, setemail] = useState(null);
-  const [password, setpassword] = useState(null);
+  const [isRed, setisRed] = useState(false);
+  const [name, setname] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
   const [loading, setloading] = useState(false);
 
   const [error, seterror] = useState(null);
@@ -18,11 +17,11 @@ const [isRed, setisRed] = useState(false);
     eo.preventDefault();
     setloading(true);
     seterror(null);
-    setisRed(false)
+    setisRed(false);
 
     if (!name || !email || !password) {
-      seterror("All input must be filled");
-      toast.error("All input must be filled");
+      seterror("All inputs must be filled");
+      toast.error("All inputs must be filled");
       setloading(false);
       return;
     }
@@ -31,7 +30,7 @@ const [isRed, setisRed] = useState(false);
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
 
     if (!regPassword.test(password)) {
-      setisRed(true)
+      setisRed(true);
       setloading(false);
       seterror(
         "Password must be at least 8 characters with 1 uppercase, 1 lowercase, 1 special character and 1 numeric."
@@ -39,44 +38,46 @@ const [isRed, setisRed] = useState(false);
       return;
     }
 
-    // Check if email exist
-    const resUserExist = await fetch("api/userExist", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
+    try {
+      // 1. التثبت من وجود المستخدم باستخدام المسار المطلق /api
+      const resUserExist = await fetch("/api/userExist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
 
-    const isUserExist = await resUserExist.json();
+      const isUserExist = await resUserExist.json();
 
-    if (isUserExist.user) {
-      seterror("Email Already exist");
-      toast.error("Email Already exist");
+      if (isUserExist.user) {
+        seterror("Email Already exists");
+        toast.error("Email Already exists");
+        setloading(false);
+        return;
+      }
 
+      // 2. إنشاء الحساب
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      if (response.ok) {
+        toast.success("Your account has been created successfully");
+        router.push("/signin");
+      } else {
+        seterror("Failed to create account, Please try again");
+      }
+    } catch (err) {
+      console.error(err);
+      seterror("An error occurred. Please try again.");
+    } finally {
       setloading(false);
-      return;
     }
-
-    // Store data in DataBase
-    const response = await fetch("api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name, email, password }),
-    });
-
-    if (response.ok) {
-      toast.success("Your account has been created successfully");
-      eo.target.reset();
-
-      router.push("/signin");
-    } else {
-      seterror("faild to create acoount, Please try again");
-    }
-
-    setloading(false);
   };
 
   return (
@@ -86,49 +87,44 @@ const [isRed, setisRed] = useState(false);
           Username
         </label>
         <input
-          onChange={(eo) => {
-            setname(eo.target.value);
-          }}
+          value={name}
+          onChange={(eo) => setname(eo.target.value)}
           required
           type="text"
           className="form-control"
           id="username"
-          aria-describedby="emailHelp"
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="exampleInputEmail1" className="form-label">
+        <label htmlFor="regEmail" className="form-label">
           Email address
         </label>
         <input
+          value={email}
           required
-          onChange={(eo) => {
-            setemail(eo.target.value);
-          }}
+          onChange={(eo) => setemail(eo.target.value)}
           type="email"
           className="form-control"
-          id="exampleInputEmail1"
-          aria-describedby="emailHelp"
+          id="regEmail"
         />
       </div>
       <div className="mb-4">
-        <label htmlFor="exampleInputPassword1" className="form-label">
+        <label htmlFor="regPassword" className="form-label">
           Password
         </label>
         <input
-        style={{backgroundColor: isRed?   "#fcaaaa" : null}}
+          value={password}
+          style={{ backgroundColor: isRed ? "#fcaaaa" : undefined }}
           required
-          onChange={(eo) => {
-            setpassword(eo.target.value);
-          }}
+          onChange={(eo) => setpassword(eo.target.value)}
           type="password"
           className="form-control"
-          id="exampleInputPassword1"
+          id="regPassword"
         />
       </div>
 
       <button
-        disabled={!name || !email || !password}
+        disabled={!name || !email || !password || loading}
         type="submit"
         className="btn btn-primary"
       >
@@ -145,10 +141,11 @@ const [isRed, setisRed] = useState(false);
         )}
       </button>
 
-      <p style={{ color: "#ff7790", fontSize: "1.1rem", marginTop: "1rem" }}>
-        {" "}
-        {error}
-      </p>
+      {error && (
+        <p style={{ color: "#ff7790", fontSize: "1.1rem", marginTop: "1rem" }}>
+          {error}
+        </p>
+      )}
     </form>
   );
 };
