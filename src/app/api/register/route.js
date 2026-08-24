@@ -4,26 +4,27 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
 export async function POST(request) {
-  // 1- Receive data from Front-end
-  const objFromFrontEnd = await request.json();
-  console.log(objFromFrontEnd);
+  try {
+    const objFromFrontEnd = await request.json();
 
-  // 2- connect to DB
-  await connectMongoDB();
+    if (!objFromFrontEnd.email || !objFromFrontEnd.password) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
 
-  // 3- Hashing password with bcrypt.js
-  console.log("*****************    salt   **************************");
-  const salt = await bcrypt.genSalt();
-  const hashedPassword = await bcrypt.hash(objFromFrontEnd.password, salt);
+    await connectMongoDB();
 
-  // 4- Try to Store obj to DB
-  // @ts-ignore
-  await UserModal.create({
-    name: objFromFrontEnd.name,
-    email: objFromFrontEnd.email,
-    password: hashedPassword,
-  });
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(objFromFrontEnd.password, salt);
 
-  // 5- Go back to frontend
-  return NextResponse.json({});
+    // @ts-ignore
+    await UserModal.create({
+      name: objFromFrontEnd.name,
+      email: objFromFrontEnd.email,
+      password: hashedPassword,
+    });
+
+    return NextResponse.json({ message: "User registered successfully" }, { status: 201 });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
