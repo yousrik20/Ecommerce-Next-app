@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import Link from "next/link";
 
@@ -16,29 +16,32 @@ const AdminBtn = ({ productId, imgPublicId }) => {
     setisLoading(true);
     seterror(null);
 
-    // Go to api/register/route.js
-    const response = await fetch("/api/deleteProduct", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        productId,
-        imgPublicId,
-      }),
-    });
+    try {
+      const response = await fetch("/api/deleteProduct", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId,
+          imgPublicId,
+        }),
+      });
 
-    if (response.ok) {
-      toast.success("Your product has been deleted successfully");
-
-      router.push("/");
-    } else {
+      if (response.ok) {
+        toast.success("Your product has been deleted successfully");
+        router.push("/");
+        router.refresh();
+      } else {
+        seterror("Failed to delete product. Please try again.");
+      }
+    } catch (err) {
+      seterror("An error occurred. Please try again.");
+    } finally {
       setisLoading(false);
-      seterror("faild to delete product, Please try again");
     }
-
-    setisLoading(false);
   };
+
   return (
     <div
       style={{ justifyContent: "center", gap: "2rem", marginTop: "3rem" }}
@@ -52,13 +55,12 @@ const AdminBtn = ({ productId, imgPublicId }) => {
         Update Product
       </Link>
 
-      <button onClick={handleDelete} className="flex delete-product">
+      <button onClick={handleDelete} disabled={isLoading} className="flex delete-product">
         <FontAwesomeIcon style={{ width: "1.1rem" }} icon={faTrash} />
-
-        {isLoading ? "Loading...." : "Delete Product"}
+        {isLoading ? "Loading..." : "Delete Product"}
       </button>
 
-      <p>{error}</p>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
