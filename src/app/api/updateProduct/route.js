@@ -20,7 +20,7 @@ export async function PUT(request) {
     );
 
     revalidatePath("/");
-
+    revalidatePath(`/product-details/${productId}`);
 
     return NextResponse.json({ message: "Product updated successfully" });
   } catch (error) {
