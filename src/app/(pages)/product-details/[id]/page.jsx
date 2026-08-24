@@ -8,7 +8,9 @@ import Image from "next/image.js";
 import AdminBtn from "./adminBtn";
 
 async function getData(iddd) {
-  const res = await fetch(`http://localhost:3000/api/getOneProduct?id=${iddd}`);
+  const res = await fetch(
+    `https://ecommerce-next-app-topaz.vercel.app/api/getOneProduct?id=${iddd}`,
+  );
 
   if (!res.ok) {
     notFound();

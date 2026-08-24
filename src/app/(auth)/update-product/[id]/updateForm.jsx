@@ -56,7 +56,7 @@ const UpdateForm = ({ productId }) => {
   useEffect(() => {
     const getData = async (productId) => {
       const res = await fetch(
-        `http://localhost:3000/api/getOneProduct?id=${productId}`,
+        `https://ecommerce-next-app-topaz.vercel.app/api/getOneProduct?id=${productId}`,
       );
       if (!res.ok) {
         notFound();
