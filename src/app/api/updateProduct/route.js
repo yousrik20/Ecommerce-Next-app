@@ -14,15 +14,13 @@ export async function PUT(request) {
 
     await connectMongoDB();
 
-    // تحديث البيانات
     await ProductModal.updateOne(
       { _id: productId },
       { title, price, description }
     );
 
-    // تحديث الكاش لصفحة المنتجات وصفحة التفاصيل
     revalidatePath("/");
-    revalidatePath(`/product/${productId}`);
+    revalidatePath(`/product-details/${productId}`);
 
     return NextResponse.json({ message: "Product updated successfully" });
   } catch (error) {
