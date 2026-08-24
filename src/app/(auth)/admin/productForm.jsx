@@ -4,9 +4,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 const ProductForm = () => {
-const [img, setImg] = useState(null);
-
-
+  const [img, setImg] = useState(null);
 
   const [title, setTitle] = useState(null);
   const [price, setPrice] = useState(null);
@@ -15,51 +13,44 @@ const [img, setImg] = useState(null);
   const [isLoading, setisLoading] = useState(false);
   const [error, seterror] = useState(null);
 
-
   const handleSubmit = async (eo) => {
-    console.log(img)
-
+    console.log(img);
 
     eo.preventDefault();
     setisLoading(true);
     seterror(null);
 
-    if (!title || !price  || !description) {
+    if (!title || !price || !description) {
       seterror("All input must be filled");
       setisLoading(false);
       return;
     }
 
-
     const formData = new FormData();
-    formData.set("productImg", img)
-    formData.set("title", title)
-    formData.set("price", price)
-    formData.set("description", description)
+    formData.set("productImg", img);
+    formData.set("title", title);
+    formData.set("price", price);
+    formData.set("description", description);
 
-       // Go to api/addProduct/route.js
-   const resAddProduct = await fetch("api/addProduct", {
-    method: "POST",
+    // Go to api/addProduct/route.js
+    const resAddProduct = await fetch("api/addProduct", {
+      method: "POST",
 
-    body:  formData,
-  });
+      body: formData,
+    });
 
-  const data = await resAddProduct.json();
-  console.log(data)
+    const data = await resAddProduct.json();
+    console.log(data);
 
+    if (resAddProduct.ok) {
+      eo.target.reset();
+      toast.success(data.message);
+    } else {
+      setisLoading(false);
+      seterror("faild to add Product, Please try again");
+    }
 
-
-  if (resAddProduct.ok) {
-    eo.target.reset();
-    toast.success(data.message);
-
-  } else {
     setisLoading(false);
-    seterror("faild to add Product, Please try again");
-  }
- 
-
-  setisLoading(false)
   };
 
   return (
@@ -70,7 +61,7 @@ const [img, setImg] = useState(null);
         </label>
         <input
           onChange={(eo) => {
-            setImg(eo.target.files[0])
+            setImg(eo.target.files[0]);
           }}
           required
           type="file"
@@ -86,7 +77,7 @@ const [img, setImg] = useState(null);
         <input
           required
           onChange={(eo) => {
-            setTitle(eo.target.value)
+            setTitle(eo.target.value);
           }}
           type="text"
           className="form-control"
@@ -100,10 +91,11 @@ const [img, setImg] = useState(null);
           Product Price:
         </label>
         <input
+          step={0.01}
           placeholder="$99.99"
           required
           onChange={(eo) => {
-            setPrice(eo.target.value)
+            setPrice(eo.target.value);
           }}
           type="number"
           className="form-control"
@@ -120,7 +112,7 @@ const [img, setImg] = useState(null);
           placeholder="Product Description....."
           required
           onChange={(eo) => {
-            setDescription(eo.target.value)
+            setDescription(eo.target.value);
           }}
           rows={3}
           className="form-control"
@@ -134,7 +126,6 @@ const [img, setImg] = useState(null);
         className="btn btn-primary"
       >
         {isLoading ? (
-     
           <div
             style={{ width: "1.5rem", height: "1.5rem" }}
             className="spinner-border"

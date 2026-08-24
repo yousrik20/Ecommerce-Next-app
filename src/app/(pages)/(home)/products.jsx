@@ -38,7 +38,7 @@ const Products = () => {
   const [arrData, setarrData] = useState([]);
   useEffect(() => {
     const getData = async (params) => {
-      const res = await fetch("http://localhost:4000/products");
+      const res = await fetch("http://localhost:3000/api/getProducts");
 
       if (!res.ok) {
         // This will activate the closest `error.js` Error Boundary
@@ -51,9 +51,10 @@ const Products = () => {
   }, []);
   return (
     <section className="products flex">
+      {arrData.length == 0 && <p>No Products Found!</p>}
       {arrData.map((item) => {
         return (
-          <article title={item.title} key={item.id} className="card">
+          <article title={item.title} key={item._id} className="card">
             <Link href={`/product-details/${item.id}`}>
               <Image
                 quality={100}
@@ -64,7 +65,7 @@ const Products = () => {
               />
             </Link>
             <div style={{ width: "266px" }} className="content">
-              <h1 className="title">{item.title.slice(0, 15)}...</h1>
+              <h4 className="title">{item.title.slice(0, 15)}...</h4>
               <p className="description">
                 {item.description.slice(0, 111)}....
               </p>

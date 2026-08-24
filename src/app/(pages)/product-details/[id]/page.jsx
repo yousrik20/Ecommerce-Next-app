@@ -33,7 +33,7 @@ const Page = async ({ params }) => {
 
   return (
     <div
-    className="product-details"
+      className="product-details"
       style={{
         height: "100vh",
         display: "grid",
@@ -44,10 +44,16 @@ const Page = async ({ params }) => {
       <Header />
 
       <main style={{ textAlign: "center" }} className="flex">
-        <Image width={266}  height={270} quality={100}  alt="" src={`${objData.productImg}`} />
+        <Image
+          width={266}
+          height={270}
+          quality={100}
+          alt=""
+          src={`${objData.productImg}`}
+        />
         <div className="product-details">
           <div style={{ justifyContent: "space-between" }} className="flex">
-            <h2>{objData.title}</h2>
+            <h6>{objData.title}</h6>
             <p className="price">${objData.price}</p>
           </div>
           <p className="description">{objData.description}</p>
