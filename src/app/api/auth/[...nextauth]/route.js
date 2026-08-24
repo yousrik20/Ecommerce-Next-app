@@ -8,10 +8,13 @@ export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
-
       credentials: {},
 
-      async authorize(credentials, req, res) {
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
         await connectMongoDB();
         // @ts-ignore
         const user = await UserModal.findOne({
@@ -21,16 +24,13 @@ export const authOptions = {
         if (user) {
           const match = await bcrypt.compare(
             credentials.password,
-            user.password,
+            user.password
           );
           if (match) {
             return user;
-          } else {
-            return null;
           }
-        } else {
-          return null;
         }
+        return null;
       },
     }),
   ],
