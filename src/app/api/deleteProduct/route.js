@@ -21,15 +21,12 @@ export async function DELETE(request) {
 
     await connectMongoDB();
 
-    // 1- حذف المنتج من قاعدة البيانات
     await ProductModal.deleteOne({ _id: productId });
 
-    // 2- حذف الصورة من Cloudinary إذا كان لديها ID
     if (imgPublicId) {
       await cloudinary.uploader.destroy(imgPublicId);
     }
 
-    // 3- تحديث الكاش لتختفي الصفحة أو المنتج من القائمة
     revalidatePath("/");
 
     return NextResponse.json({ message: "Product deleted successfully" });
