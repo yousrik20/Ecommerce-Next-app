@@ -8,6 +8,7 @@ const productSchema = new Schema({
   price: Number,
   description: String,
   productImg: String,
+  imgPublicId: String,
 });
 
 // Create a model based on that schema

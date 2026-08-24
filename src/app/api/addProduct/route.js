@@ -18,6 +18,7 @@ export async function POST(request) {
   const buffer = Buffer.from(bytes);
   const uploadedImg = await uploadStream(buffer);
   const imgURL = uploadedImg.url;
+  const publicId = uploadedImg.public_id;
   console.log("=========DONE ===========");
   // 2- connect to DB
   await connectMongoDB();
@@ -29,6 +30,7 @@ export async function POST(request) {
     title: objFromFrontEnd.get("title"),
     price: objFromFrontEnd.get("price"),
     description: objFromFrontEnd.get("description"),
+    imgPublicId: publicId,
   });
 
   // 5- Go back to frontend

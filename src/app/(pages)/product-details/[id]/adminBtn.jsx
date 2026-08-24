@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus, faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
-const AdminBtn = ({ productId }) => {
+const AdminBtn = ({ productId, imgPublicId }) => {
   const [isLoading, setisLoading] = useState(false);
   const [error, seterror] = useState(null);
 
@@ -23,6 +23,7 @@ const AdminBtn = ({ productId }) => {
       },
       body: JSON.stringify({
         productId,
+        imgPublicId,
       }),
     });
 
