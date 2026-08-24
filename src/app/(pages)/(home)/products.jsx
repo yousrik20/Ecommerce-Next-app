@@ -38,7 +38,7 @@ const Products = () => {
   const [arrData, setarrData] = useState([]);
   useEffect(() => {
     const getData = async (params) => {
-      const res = await fetch("http://localhost:3000/api/getProducts");
+      const res = await fetch("/api/getProducts");
 
       if (!res.ok) {
         // This will activate the closest `error.js` Error Boundary
