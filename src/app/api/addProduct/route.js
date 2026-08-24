@@ -1,38 +1,37 @@
-import UserModal from "app/DBconfig/models/user";
 import { connectMongoDB } from "app/DBconfig/mongoDB";
 import { NextResponse } from "next/server";
-import bcrypt from "bcrypt";
 import ProductModal from "app/DBconfig/models/product";
 import { uploadStream } from "helper/uploadImgCloudinary";
 
 export async function POST(request) {
-  // 1- Receive data from Front-end
-  const objFromFrontEnd = await request.formData();
-  console.log(objFromFrontEnd);
+  try {
+    const objFromFrontEnd = await request.formData();
+    const productImg = objFromFrontEnd.get("productImg");
 
-  const productImg = objFromFrontEnd.get("productImg");
-  console.log(productImg);
+    if (!productImg) {
+      return NextResponse.json({ error: "Image is required" }, { status: 400 });
+    }
 
-  // Convert Img into Buffer & Upload Image to Cloudinary
-  const bytes = await productImg.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-  const uploadedImg = await uploadStream(buffer);
-  const imgURL = uploadedImg.url;
-  const publicId = uploadedImg.public_id;
-  console.log("=========DONE ===========");
-  // 2- connect to DB
-  await connectMongoDB();
+    const bytes = await productImg.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    const uploadedImg = await uploadStream(buffer);
+    const imgURL = uploadedImg.url;
+    const publicId = uploadedImg.public_id;
 
-  // 4- Try to Store obj to DB
-  // @ts-ignore
-  await ProductModal.create({
-    productImg: imgURL,
-    title: objFromFrontEnd.get("title"),
-    price: objFromFrontEnd.get("price"),
-    description: objFromFrontEnd.get("description"),
-    imgPublicId: publicId,
-  });
+    await connectMongoDB();
 
-  // 5- Go back to frontend
-  return NextResponse.json({ message: "product added successfully" });
+    // @ts-ignore
+    await ProductModal.create({
+      productImg: imgURL,
+      title: objFromFrontEnd.get("title"),
+      price: objFromFrontEnd.get("price"),
+      description: objFromFrontEnd.get("description"),
+      imgPublicId: publicId,
+    });
+
+    return NextResponse.json({ message: "Product added successfully" }, { status: 201 });
+  } catch (error) {
+    console.error("Add Product Error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
