@@ -17,7 +17,7 @@ const AdminBtn = ({ productId, imgPublicId }) => {
     seterror(null);
 
     // Go to api/register/route.js
-    const response = await fetch("http://localhost:3000/api/deleteProduct", {
+    const response = await fetch("/api/deleteProduct", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
