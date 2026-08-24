@@ -1,12 +1,6 @@
 /** @type {import('next').NextConfig} */
-const isProd = process.env.NODE_ENV === "production";
-
 const nextConfig = {
-  output: "export",
-  basePath: isProd ? "/Ecommerce-Next-app" : "",
-  images: {
-    unoptimized: true,
-  },
+  /* ضع إعداداتك الخاصة هنا إن وجدت، دون استخدام output أو basePath */
 };
 
 export default nextConfig;
