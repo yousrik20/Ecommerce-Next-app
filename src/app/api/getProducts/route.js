@@ -1,13 +1,15 @@
 import ProductModal from "app/DBconfig/models/product";
-import UserModal from "app/DBconfig/models/user";
 import { connectMongoDB } from "app/DBconfig/mongoDB";
 import { NextResponse } from "next/server";
 
-export async function GET(request) {
-  await connectMongoDB();
-  // @ts-ignore
-  const arrData = await ProductModal.find();
+export async function GET() {
+  try {
+    await connectMongoDB();
+    // @ts-ignore
+    const arrData = await ProductModal.find();
 
-  // 5- Go back to frontend
-  return NextResponse.json(arrData);
+    return NextResponse.json(arrData);
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
