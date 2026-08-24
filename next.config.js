@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const isProd = process.env.NODE_ENV === "production";
 
-module.exports = {
+const nextConfig = {
+  output: "export",
+  basePath: isProd ? "/Ecommerce-Next-app" : "",
   images: {
-    remotePatterns: [
-      {
-        hostname: "res.cloudinary.com",
-      },
-    ],
+    unoptimized: true,
   },
 };
+
+export default nextConfig;

@@ -17,19 +17,16 @@ const AdminBtn = ({ productId, imgPublicId }) => {
     seterror(null);
 
     // Go to api/register/route.js
-    const response = await fetch(
-      "https://ecommerce-next-app-topaz.vercel.app/api/deleteProduct",
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productId,
-          imgPublicId,
-        }),
+    const response = await fetch("http://localhost:3000/api/deleteProduct", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        productId,
+        imgPublicId,
+      }),
+    });
 
     if (response.ok) {
       toast.success("Your product has been deleted successfully");
