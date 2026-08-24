@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image.js";
 
 async function getData(iddd) {
-  const res = await fetch(`http://localhost:4000/products/${iddd}`);
+  const res = await fetch(`http://localhost:3000/api/getOneProduct?id=${iddd}`);
   // The return value is *not* serialized
   // You can return Date, Map, Set, etc.
 

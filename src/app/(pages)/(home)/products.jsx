@@ -55,7 +55,7 @@ const Products = () => {
       {arrData.map((item) => {
         return (
           <article title={item.title} key={item._id} className="card">
-            <Link href={`/product-details/${item.id}`}>
+            <Link href={`/product-details/${item._id}`}>
               <Image
                 quality={100}
                 width={266}
