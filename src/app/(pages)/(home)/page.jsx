@@ -1,6 +1,6 @@
 // @ts-nocheck
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Suspense } from "react";
 import Footer from "../../../components/footer/footer.jsx";
 import Header from "../../../components/header/header.jsx";
@@ -11,7 +11,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 export default function Home() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
+
   return (
     <>
       <div className="top-img">
@@ -40,7 +41,7 @@ export default function Home() {
 
         {status === "loading" && <Loading />}
 
-        {status == "unauthenticated" && (
+        {status === "unauthenticated" && (
           <h3
             style={{
               display: "flex",
