@@ -9,11 +9,8 @@ import AdminBtn from "./adminBtn";
 
 async function getData(iddd) {
   const res = await fetch(`http://localhost:3000/api/getOneProduct?id=${iddd}`);
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
 
   if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
     notFound();
   }
 
@@ -55,7 +52,7 @@ const Page = async ({ params }) => {
           />
           <div className="product-details">
             <div style={{ justifyContent: "space-between" }} className="flex">
-              <h6>{objData.title}</h6>
+              <h2>{objData.title}</h2>
               <p className="price">${objData.price}</p>
             </div>
             <p className="description">{objData.description}</p>
