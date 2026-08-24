@@ -1,7 +1,8 @@
 import ProductModal from "app/DBconfig/models/product";
 import { connectMongoDB } from "app/DBconfig/mongoDB";
 import { NextResponse } from "next/server";
-const cloudinary = require("cloudinary").v2;
+import { revalidatePath } from "next/cache";
+import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -10,21 +11,30 @@ cloudinary.config({
 });
 
 export async function DELETE(request) {
-  // 1- Receive data from Front-end
-  console.log("oooooooooooooooooooooooooooooooooooooooooooooo");
-  const objFromFrontEnd = await request.json();
-  console.log(objFromFrontEnd);
+  try {
+    const objFromFrontEnd = await request.json();
+    const { productId, imgPublicId } = objFromFrontEnd;
 
-  // 2- connect to DB
-  await connectMongoDB();
+    if (!productId) {
+      return NextResponse.json({ error: "Product ID is required" }, { status: 400 });
+    }
 
-  // 4- Try to Store obj to DB
-  await ProductModal.deleteOne({
-    _id: objFromFrontEnd.productId,
-  });
+    await connectMongoDB();
 
-  await cloudinary.uploader.destroy(objFromFrontEnd.imgPublicId);
+    // 1- حذف المنتج من قاعدة البيانات
+    await ProductModal.deleteOne({ _id: productId });
 
-  // 5- Go back to frontend
-  return NextResponse.json({});
+    // 2- حذف الصورة من Cloudinary إذا كان لديها ID
+    if (imgPublicId) {
+      await cloudinary.uploader.destroy(imgPublicId);
+    }
+
+    // 3- تحديث الكاش لتختفي الصفحة أو المنتج من القائمة
+    revalidatePath("/");
+
+    return NextResponse.json({ message: "Product deleted successfully" });
+  } catch (error) {
+    console.error("Delete Error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
